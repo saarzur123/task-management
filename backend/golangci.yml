@@ -1,0 +1,44 @@
+run:
+  deadline: 5m
+  skip-dirs:
+    - mocks
+
+linters:
+  disable-all: true
+  govet:
+    enable:
+      - fieldalignment
+  enable:
+    - deadcode
+    - errcheck
+    - unused
+    - gosimple
+    - structcheck
+    - varcheck
+    - typecheck
+    - govet
+    - staticcheck
+    - ineffassign
+    - stylecheck
+    - unconvert
+    - goconst
+    - misspell
+    - gocyclo
+    - gofmt
+    - gosec
+    - revive
+    - bodyclose
+    - depguard
+    - errorlint
+    - prealloc
+    - whitespace
+    - goerr113
+issues:
+  exclude-rules:
+    # Exclude some linters from running on tests files.
+    - path: _(test|mock)\.go
+      linters:
+        - errcheck
+        - gosec
+        - goconst
+        - goerr113

@@ -1,0 +1,57 @@
+name: CI Pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  ci:
+    name: CI Pipeline
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.23'
+
+      - name: Backend tests
+        working-directory: ./backend
+        run: |
+          go test ./...
+
+      - name: Backend lint
+        working-directory: ./backend
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.54.2
+          ./bin/golangci-lint run
+
+      - name: Frontend tests
+        working-directory: ./frontend
+        run: |
+          npm install
+          npm test -- --watchAll=false
+
+      - name: Frontend lint
+        working-directory: ./frontend
+        run: |
+          npm install eslint
+          npx eslint src --ext .js,.jsx,.ts,.tsx
+
+      - name: Build backend Docker image
+        run: docker build -t backend-service:latest ./backend
+
+      - name: Build frontend Docker image
+        run: docker build -t frontend-service:latest ./frontend

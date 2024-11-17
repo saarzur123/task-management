@@ -1,0 +1,17 @@
+.tasks-table {
+    width: 70vw !important;
+}
+
+.tasks-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: end;
+}
+
+.no-tasks-label {
+    display: flex;
+   justify-content: center;
+    width: 100%;
+    margin-top: 100px;
+}
