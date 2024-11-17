@@ -26,7 +26,7 @@ tools:
 	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /usr/local/bin v1.61.0
 backend-lint:
 	@echo "Linting backend code..."
-	cd $(BACKEND_DIR) && golangci-lint run
+	cd $(BACKEND_DIR) && golangci-lint run --config $(BACKEND_DIR)/golangci.yml
 	@echo "Done"
 
 frontend-lint:
