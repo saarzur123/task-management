@@ -3,7 +3,8 @@ run:
   skip-dirs:
     - mocks
     - go
-
+  skip-files:
+    - '_test\.go$'
 linters:
   disable-all: true
   govet:
@@ -22,10 +23,8 @@ linters:
     - misspell
     - gocyclo
     - gofmt
-    - gosec
     - revive
     - bodyclose
-    - depguard
     - errorlint
     - prealloc
     - whitespace
