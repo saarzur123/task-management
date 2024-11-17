@@ -35,7 +35,7 @@ The goal of this project is to demonstrate REST API design, React-based frontend
 1. Clone the repository:
    ```bash
    git clone https://github.com/saarzur123/task-management.git
-   cd task-management-app
+   cd task-management
    ```
 
 2. **Using Docker Compose**:
