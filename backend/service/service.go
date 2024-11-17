@@ -3,7 +3,6 @@ package service
 import (
 	"database/sql"
 	"errors"
-	_ "github.com/mattn/go-sqlite3"
 	"github.com/saarzur123/task-management/backend/models"
 	"strconv"
 	"time"
@@ -54,12 +53,12 @@ func (m *TaskManager) Create(task *models.Task) error {
 		return err
 	}
 
-	dbId, err := row.LastInsertId()
+	dbID, err := row.LastInsertId()
 	if err != nil {
 		return err
 	}
 
-	task.Id = strconv.FormatInt(dbId, 10)
+	task.ID = strconv.FormatInt(dbID, 10)
 	return nil
 }
 
@@ -68,7 +67,7 @@ func (m *TaskManager) GetByID(id string) (*models.Task, error) {
 	row := m.DB.QueryRow(query, id)
 
 	task := models.Task{}
-	err := row.Scan(&task.Id, &task.Title, &task.Description, &task.Status, &task.CreatedAt)
+	err := row.Scan(&task.ID, &task.Title, &task.Description, &task.Status, &task.CreatedAt)
 	if err != nil {
 		return &task, err
 	}
@@ -78,7 +77,7 @@ func (m *TaskManager) GetByID(id string) (*models.Task, error) {
 
 func (m *TaskManager) Update(task *models.Task) error {
 	query := `UPDATE tasks SET title = ?, description = ?, status = ? WHERE id = ?`
-	rows, err := m.DB.Exec(query, task.Title, task.Description, task.Status, task.Id)
+	rows, err := m.DB.Exec(query, task.Title, task.Description, task.Status, task.ID)
 	if err != nil {
 		return err
 	}
@@ -124,7 +123,7 @@ func (m *TaskManager) GetAll() ([]models.Task, error) {
 	tasks := make([]models.Task, 0)
 	for rows.Next() {
 		var task models.Task
-		err = rows.Scan(&task.Id, &task.Title, &task.Description, &task.Status, &task.CreatedAt)
+		err = rows.Scan(&task.ID, &task.Title, &task.Description, &task.Status, &task.CreatedAt)
 		if err != nil {
 			return nil, err
 		}

@@ -40,10 +40,7 @@ describe("TasksTable", () => {
             ok: true,
             json: async () => mockTasks,
         });
-
-        await act(async () => {
-            render(<TasksTable/>);
-        });
+        render(<TasksTable/>);
         await waitFor(() => screen.getByText("Task 1"));
         await waitFor(() => screen.getByText("Task 2"));
 
@@ -57,10 +54,7 @@ describe("TasksTable", () => {
 
     test('renders error message if fetch fails', async () => {
         fetch.mockRejectedValueOnce(new Error(errorMessage));
-
-        await act(async () => {
-           render(<TasksTable/>)
-        });
+        render(<TasksTable/>)
         await waitFor(() => expect(global.alert).toHaveBeenCalledWith(errorMessage));
 
         expect(global.alert).toHaveBeenCalledTimes(1);

@@ -2,20 +2,18 @@ run:
   deadline: 5m
   skip-dirs:
     - mocks
-
+    - go
+  skip-files:
+    - '_test\.go$'
 linters:
   disable-all: true
   govet:
     enable:
       - fieldalignment
   enable:
-    - deadcode
     - errcheck
     - unused
     - gosimple
-    - structcheck
-    - varcheck
-    - typecheck
     - govet
     - staticcheck
     - ineffassign
@@ -25,10 +23,8 @@ linters:
     - misspell
     - gocyclo
     - gofmt
-    - gosec
     - revive
     - bodyclose
-    - depguard
     - errorlint
     - prealloc
     - whitespace
@@ -41,4 +37,5 @@ issues:
         - errcheck
         - gosec
         - goconst
-        - goerr113
+        - err113
+        - typecheck

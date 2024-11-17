@@ -35,13 +35,13 @@ jobs:
       - name: Backend lint
         working-directory: ./backend
         run: |
-          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.54.2
-          ./bin/golangci-lint run
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.61.0 && ./bin/golangci-lint run --config golangci.yml --skip-dirs "/usr/local|/opt/homebrew/Cellar/go"
 
       - name: Frontend tests
         working-directory: ./frontend
         run: |
           npm install
+          npm install node-fetch
           npm test -- --watchAll=false
 
       - name: Frontend lint

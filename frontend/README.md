@@ -1,70 +1,38 @@
-# Getting Started with Create React App
+# Overview
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A ReactJS application that integrates with the backend, enabling users to perform CRUD operations on tasks through an intuitive user interface.
 
-## Available Scripts
+## Components
+### TaskActionsModal.js
+`TaskActionsModal.js` is a React component responsible for managing the creation and editing of tasks through a modal dialog.  
+It enables users to input or modify task details, such as the title, description, and status, with required fields enforced.  
+The modal dynamically adapts based on whether the user is creating a new task or updating an existing one.  
+It interacts with the backend API to perform task creation or updates, while displaying loading indicators during the process and handling errors in case of failures.
 
-In the project directory, you can run:
+### TasksTable.js
+`TasksTable.js` is a React component that displays a table of tasks fetched from the backend API.  
+It shows each task's title, description, and status, and provides actions for editing and deleting tasks.  
+Users can also add new tasks through an "Add" button (+ icon).  
+The component manages the state for task data, handling loading states and dynamically updating the task list after actions such as creating, editing, or deleting tasks.  
+It ensures smooth integration with the backend and provides a clean, organized table view for task management.
 
-### `npm start`
+## Technology Stack
+The frontend of the application is built using **React.js** which makes it easy to build reusable UI elements and manage the application state.  
+The state is managed using React’s built-in `useState` hook, which allows for tracking dynamic values like task data and loading states.  
+The `useEffect` hook is used to handle side effects, such as fetching data from the backend API when the component mounts or updates.  
+For API communication, the fetch API is used to make HTTP requests, allowing the app to interact with the backend for CRUD operations on tasks.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# Setup
+### Prerequisites
+- [Node.js](https://nodejs.org/) (optional for local frontend development)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Run Locally
+  - Navigate to the `frontend` folder.
+  - Install dependencies:
+    ```bash
+    npm install
+    ```
+  - Start the development server:
+    ```bash
+    npm start
+    ```
