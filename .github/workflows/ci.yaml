@@ -42,6 +42,7 @@ jobs:
         working-directory: ./frontend
         run: |
           npm install
+          npm install node-fetch
           npm test -- --watchAll=false
 
       - name: Frontend lint
