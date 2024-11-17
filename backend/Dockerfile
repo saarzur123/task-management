@@ -5,29 +5,31 @@ FROM golang:1.23 AS builder
 WORKDIR /app
 
 # Copy go mod and sum files
-COPY backend/go.mod ./
-COPY backend/go.sum ./
+COPY go.mod ./
+COPY go.sum ./
 
 # Download dependencies
 RUN go mod download
 
 # Copy the source code
-COPY backend .
+COPY . .
 
-# Build the application
+# Build the application with CGO enabled
 RUN CGO_ENABLED=1 GOOS=linux go build -a -o main main.go
 
-# Use a minimal image for the final stage
-FROM alpine:3.14
+FROM ubuntu:22.04 AS final
+
+# Install SQLite runtime dependencies
+RUN apt-get update && apt-get install -y libsqlite3-0 && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory
 WORKDIR /app
 
-# Copy the binary from the builder stage into /app
+# Copy the binary from the builder stage
 COPY --from=builder /app/main .
 
 # Expose port 8080
 EXPOSE 8080
 
 # Command to run the application
-ENTRYPOINT ["/main"]
+ENTRYPOINT ["/app/main"]
