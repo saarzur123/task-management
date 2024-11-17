@@ -3,6 +3,7 @@ package service
 import (
 	"database/sql"
 	"errors"
+	_ "github.com/mattn/go-sqlite3" // nolint: revive
 	"github.com/saarzur123/task-management/backend/models"
 	"strconv"
 	"time"
