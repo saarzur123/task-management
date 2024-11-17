@@ -10,12 +10,16 @@ The goal of this project is to demonstrate REST API design, React-based frontend
 - Endpoints to create, read, update, and delete tasks.
 - In-memory data storage for simplicity.
 - Unit-tests for reliability.
+  
+For more information visit [readme](https://github.com/saarzur123/task-management/blob/main/backend/README.md)
 
 ### Frontend (React)
 - User-friendly interface to interact with tasks.
 - Add, edit, view, and delete tasks.
 - Minimal and responsive UI.
 - Integration with backend API.
+
+For more information visit [readme](https://github.com/saarzur123/task-management/blob/main/frontend/README.md)
 
 ### Deployment
 - Dockerized backend and frontend.
