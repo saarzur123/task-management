@@ -1,9 +1,7 @@
-GO_FILES := $(find . -iname '*.go' -type f | grep -v /vendor/)
-
 BACKEND_DIR=backend
 FRONTEND_DIR=frontend
 
-.PHONY: test tools lint backend-test frontend-test backend-lint frontend-lint docker-backend docker-frontend
+.PHONY: test lint backend-test frontend-test backend-lint frontend-lint docker-backend docker-frontend
 
 # Run tests
 test: backend-test frontend-test
@@ -22,11 +20,9 @@ frontend-test:
 # Lint
 lint: backend-lint frontend-lint
 
-tools:
-	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /usr/local/bin v1.61.0
 backend-lint:
 	@echo "Linting backend code..."
-	cd $(BACKEND_DIR) && golangci-lint run --config $(BACKEND_DIR)/golangci.yml
+	 cd $(BACKEND_DIR) && curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /usr/local/bin v1.61.0 && ./bin/golangci-lint run --config golangci.yml --skip-dirs "/usr/local|/opt/homebrew/Cellar/go"
 	@echo "Done"
 
 frontend-lint:

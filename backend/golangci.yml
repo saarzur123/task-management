@@ -2,6 +2,7 @@ run:
   deadline: 5m
   skip-dirs:
     - mocks
+    - go
 
 linters:
   disable-all: true
@@ -9,13 +10,9 @@ linters:
     enable:
       - fieldalignment
   enable:
-    - deadcode
     - errcheck
     - unused
     - gosimple
-    - structcheck
-    - varcheck
-    - typecheck
     - govet
     - staticcheck
     - ineffassign
@@ -41,4 +38,5 @@ issues:
         - errcheck
         - gosec
         - goconst
-        - goerr113
+        - err113
+        - typecheck
