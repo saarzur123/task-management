@@ -11,7 +11,7 @@ Each task is represented by the following model:
 
 ```go
     type Task struct {
-        Id          string    `json:"id"`
+        ID          string    `json:"id"`
         Title       string    `json:"title"`
         Description string    `json:"description"`
         Status      string    `json:"status"`

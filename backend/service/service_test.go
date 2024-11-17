@@ -59,7 +59,7 @@ var _ = Describe("TaskManager", func() {
 
 			err := manager.Create(&task)
 			Expect(err).To(Succeed())
-			Expect(task.Id).To(Equal("1"), "defined by the database")
+			Expect(task.ID).To(Equal("1"), "defined by the database")
 			Expect(task.CreatedAt).ToNot(BeZero())
 			Expect(mockSQL.ExpectationsWereMet()).To(Succeed())
 		})
@@ -73,7 +73,7 @@ var _ = Describe("TaskManager", func() {
 			mockSQL.ExpectExec("INSERT INTO tasks").WithArgs(task.Title, task.Description, task.Status, sqlmock.AnyArg()).WillReturnResult(sqlmock.NewResult(2, 1))
 			err = manager.Create(&task)
 			Expect(err).To(Succeed())
-			Expect(task.Id).To(Equal("2"), "defined by the database")
+			Expect(task.ID).To(Equal("2"), "defined by the database")
 			Expect(task.CreatedAt).ToNot(BeZero())
 			Expect(mockSQL.ExpectationsWereMet()).To(Succeed())
 		})
@@ -91,7 +91,7 @@ var _ = Describe("TaskManager", func() {
 
 			err := manager.Create(&task)
 			Expect(err).To(MatchError(errMock))
-			Expect(task.Id).To(Equal("2"), "defined by the database - last inserted")
+			Expect(task.ID).To(Equal("2"), "defined by the database - last inserted")
 			Expect(task.CreatedAt).ToNot(BeZero())
 			Expect(mockSQL.ExpectationsWereMet()).To(Succeed())
 		})
@@ -106,7 +106,7 @@ var _ = Describe("TaskManager", func() {
 
 			resultTask, err := manager.GetByID(taskID1)
 			Expect(err).To(Succeed())
-			Expect(resultTask.Id).To(Equal(taskID1), "defined by the database")
+			Expect(resultTask.ID).To(Equal(taskID1), "defined by the database")
 			Expect(resultTask.CreatedAt).NotTo(BeZero())
 			Expect(resultTask.Title).To(Equal(task.Title))
 			Expect(resultTask.Description).To(Equal(task.Description))
@@ -128,7 +128,7 @@ var _ = Describe("TaskManager", func() {
 
 	Describe("Update", func() {
 		var (
-			updatedTask = &models.Task{Title: task.Title, Description: task.Description, Status: task.Status, CreatedAt: oldTask.CreatedAt, Id: taskID1}
+			updatedTask = &models.Task{Title: task.Title, Description: task.Description, Status: task.Status, CreatedAt: oldTask.CreatedAt, ID: taskID1}
 		)
 
 		It("succeeds to update task", func() {
@@ -136,7 +136,7 @@ var _ = Describe("TaskManager", func() {
 			mockSQL.ExpectExec("INSERT INTO tasks").WithArgs(oldTask.Title, oldTask.Description, oldTask.Status, sqlmock.AnyArg()).WillReturnResult(sqlmock.NewResult(1, 1))
 			err := manager.Create(&oldTask)
 			Expect(err).To(Succeed())
-			Expect(oldTask.Id).To(Equal("1"), "defined by the database")
+			Expect(oldTask.ID).To(Equal("1"), "defined by the database")
 			Expect(oldTask.CreatedAt).ToNot(BeZero())
 			Expect(mockSQL.ExpectationsWereMet()).To(Succeed())
 
@@ -144,12 +144,12 @@ var _ = Describe("TaskManager", func() {
 
 			// update
 			mockSQL.ExpectExec(`UPDATE tasks SET title = \?, description = \?, status = \? WHERE id = \?`).
-				WithArgs(updatedTask.Title, updatedTask.Description, updatedTask.Status, updatedTask.Id).
+				WithArgs(updatedTask.Title, updatedTask.Description, updatedTask.Status, updatedTask.ID).
 				WillReturnResult(sqlmock.NewResult(0, 1))
 
 			err = manager.Update(updatedTask)
 			Expect(err).To(Succeed())
-			Expect(updatedTask.Id).To(Equal(oldTask.Id), "shouldn't be changed")
+			Expect(updatedTask.ID).To(Equal(oldTask.ID), "shouldn't be changed")
 			Expect(updatedTask.CreatedAt).To(Equal(oldTask.CreatedAt), "shouldn't be changed")
 			Expect(updatedTask.Title).To(Not(Equal(oldTask.Title)), "should have changed")
 			Expect(updatedTask.Description).To(Not(Equal(oldTask.Title)), "should have changed")
@@ -159,7 +159,7 @@ var _ = Describe("TaskManager", func() {
 
 		It("returns an error if the update query fails", func() {
 			mockSQL.ExpectExec(`UPDATE tasks SET title = \?, description = \?, status = \? WHERE id = \?`).
-				WithArgs(updatedTask.Title, updatedTask.Description, updatedTask.Status, updatedTask.Id).
+				WithArgs(updatedTask.Title, updatedTask.Description, updatedTask.Status, updatedTask.ID).
 				WillReturnError(errMock)
 
 			err := manager.Update(updatedTask)
@@ -169,7 +169,7 @@ var _ = Describe("TaskManager", func() {
 
 		It("returns an error when failed on getting rows affected", func() {
 			mockSQL.ExpectExec(`UPDATE tasks SET title = \?, description = \?, status = \? WHERE id = \?`).
-				WithArgs(updatedTask.Title, updatedTask.Description, updatedTask.Status, updatedTask.Id).
+				WithArgs(updatedTask.Title, updatedTask.Description, updatedTask.Status, updatedTask.ID).
 				WillReturnResult(sqlmock.NewErrorResult(errMock))
 
 			err := manager.Update(updatedTask)
@@ -179,7 +179,7 @@ var _ = Describe("TaskManager", func() {
 
 		It("returns an error when no rows were updated", func() {
 			mockSQL.ExpectExec(`UPDATE tasks SET title = \?, description = \?, status = \? WHERE id = \?`).
-				WithArgs(updatedTask.Title, updatedTask.Description, updatedTask.Status, updatedTask.Id).
+				WithArgs(updatedTask.Title, updatedTask.Description, updatedTask.Status, updatedTask.ID).
 				WillReturnResult(sqlmock.NewResult(0, 0))
 
 			err := manager.Update(updatedTask)
@@ -194,7 +194,7 @@ var _ = Describe("TaskManager", func() {
 			mockSQL.ExpectExec("INSERT INTO tasks").WithArgs(oldTask.Title, oldTask.Description, oldTask.Status, sqlmock.AnyArg()).WillReturnResult(sqlmock.NewResult(1, 1))
 			err := manager.Create(&oldTask)
 			Expect(err).To(Succeed())
-			Expect(oldTask.Id).To(Equal("1"), "defined by the database")
+			Expect(oldTask.ID).To(Equal("1"), "defined by the database")
 			Expect(oldTask.CreatedAt).ToNot(BeZero())
 			Expect(mockSQL.ExpectationsWereMet()).To(Succeed())
 

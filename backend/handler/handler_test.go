@@ -22,7 +22,14 @@ func TestManager(t *testing.T) {
 	RunSpecs(t, "Manager Suite")
 }
 
+var (
+	errMock = errors.New("mock error")
+)
+
 var _ = Describe("TaskHandler", func() {
+	const (
+		failedToEncode = "failed to encode tasks"
+	)
 	var (
 		mockDB           *serviceMock.MockTaskRepository
 		handler          *TaskHandler
@@ -30,7 +37,7 @@ var _ = Describe("TaskHandler", func() {
 		request          *http.Request
 		testErr          error
 		multipleTasks    = []models.Task{{Title: "Task 1"}, {Title: "Task 2"}}
-		errMock          = errors.New("mock error")
+		failedEncodeBody = bytes.NewBuffer([]byte(failedToEncode))
 	)
 
 	BeforeEach(func() {
@@ -78,6 +85,16 @@ var _ = Describe("TaskHandler", func() {
 			Expect(responseRecorder.Code).To(Equal(http.StatusInternalServerError))
 			Expect(responseRecorder.Body.String()).To(ContainSubstring(errMock.Error()))
 		})
+
+		It("returns 500 when encoding tasks to JSON fails", func() {
+			mockDB.EXPECT().Create(&task).Return(nil)
+
+			faultyResponseRecorder := &FaultyResponseWriter{Body: failedEncodeBody}
+			handler.CreateTask(faultyResponseRecorder, request)
+
+			Expect(faultyResponseRecorder.StatusCode).To(Equal(http.StatusInternalServerError))
+			Expect(faultyResponseRecorder.Body.String()).To(ContainSubstring(failedToEncode))
+		})
 	})
 
 	Describe("GetAllTasks", func() {
@@ -115,6 +132,16 @@ var _ = Describe("TaskHandler", func() {
 			json.NewDecoder(responseRecorder.Body).Decode(&responseTask)
 			Expect(responseTask).To(BeEmpty())
 		})
+
+		It("returns 500 when encoding tasks to JSON fails", func() {
+			mockDB.EXPECT().GetAll().Return(multipleTasks, nil)
+
+			faultyResponseRecorder := &FaultyResponseWriter{Body: failedEncodeBody}
+			handler.GetAllTasks(faultyResponseRecorder, request)
+
+			Expect(faultyResponseRecorder.StatusCode).To(Equal(http.StatusInternalServerError))
+			Expect(faultyResponseRecorder.Body.String()).To(ContainSubstring(failedToEncode))
+		})
 	})
 
 	Describe("GetTask", func() {
@@ -126,7 +153,7 @@ var _ = Describe("TaskHandler", func() {
 		})
 
 		It("returns the task by ID", func() {
-			task := models.Task{Id: "1", Title: "Task 1"}
+			task := models.Task{ID: "1", Title: "Task 1"}
 			mockDB.EXPECT().GetByID("1").Return(&task, nil)
 
 			handler.GetTask(responseRecorder, request)
@@ -151,11 +178,22 @@ var _ = Describe("TaskHandler", func() {
 			Expect(responseRecorder.Code).To(Equal(http.StatusInternalServerError))
 			Expect(responseRecorder.Body.String()).To(ContainSubstring(errMock.Error()))
 		})
+
+		It("returns 500 when encoding tasks to JSON fails", func() {
+			task := models.Task{ID: "1", Title: "Task 1"}
+			mockDB.EXPECT().GetByID("1").Return(&task, nil)
+
+			faultyResponseRecorder := &FaultyResponseWriter{Body: failedEncodeBody}
+			handler.GetTask(faultyResponseRecorder, request)
+
+			Expect(faultyResponseRecorder.StatusCode).To(Equal(http.StatusInternalServerError))
+			Expect(faultyResponseRecorder.Body.String()).To(ContainSubstring(failedToEncode))
+		})
 	})
 
 	Describe("UpdateTask", func() {
 		var (
-			task = models.Task{Id: "1", Title: "Updated Task"}
+			task = models.Task{ID: "1", Title: "Updated Task"}
 		)
 
 		BeforeEach(func() {
@@ -200,6 +238,16 @@ var _ = Describe("TaskHandler", func() {
 			Expect(responseRecorder.Code).To(Equal(http.StatusNotFound))
 			Expect(responseRecorder.Body.String()).To(ContainSubstring("Task not found"))
 		})
+
+		It("returns 500 when encoding tasks to JSON fails", func() {
+			mockDB.EXPECT().Update(&task).Return(nil)
+
+			faultyResponseRecorder := &FaultyResponseWriter{Body: failedEncodeBody}
+			handler.UpdateTask(faultyResponseRecorder, request)
+
+			Expect(faultyResponseRecorder.StatusCode).To(Equal(http.StatusInternalServerError))
+			Expect(faultyResponseRecorder.Body.String()).To(ContainSubstring(failedToEncode))
+		})
 	})
 
 	Describe("DeleteTask", func() {
@@ -234,3 +282,21 @@ var _ = Describe("TaskHandler", func() {
 		})
 	})
 })
+
+type FaultyResponseWriter struct {
+	http.ResponseWriter
+	Body       *bytes.Buffer
+	StatusCode int
+}
+
+func (frw *FaultyResponseWriter) WriteHeader(statusCode int) {
+	frw.StatusCode = statusCode
+}
+
+func (frw *FaultyResponseWriter) Write(_ []byte) (int, error) {
+	return 0, errMock
+}
+
+func (frw *FaultyResponseWriter) Header() http.Header {
+	return make(http.Header)
+}
